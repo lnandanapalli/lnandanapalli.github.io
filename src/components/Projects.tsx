@@ -33,7 +33,7 @@ const PROJECTS: Project[] = [
       "Containerized the backend with Docker and deployed on Azure App Service and hosted frontend on Azure Static Web Apps.",
     ],
     tags: ["React", "FastAPI", "TypeScript", "SQL Server", "Docker", "Azure", "LLMs"],
-    github: "https://github.com/lnandanapalli",
+    github: "https://github.com/lnandanapalli/nlpdf",
   },
 ];
 
