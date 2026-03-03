@@ -25,12 +25,12 @@ const SKILL_CATEGORIES: SkillCategory[] = [
   {
     title: "Languages",
     icon: <CodeIcon />,
-    skills: ["Python", "Java", "JavaScript", "TypeScript", "C", "C++", "C#", "Go", "Rust", "SQL", "Bash"],
+    skills: ["Python", "Java", "JavaScript", "TypeScript", "HTML", "CSS", "SQL", "Bash"],
   },
   {
     title: "Frameworks",
     icon: <WebIcon />,
-    skills: ["Spring Boot", "FastAPI", "React", "Next.js", "Bootstrap", "Material UI", "JUnit", "Pytest", "Selenium"],
+    skills: ["Spring Boot", "FastAPI", "React", "Next.js", "Bootstrap", "Material UI", "SQLAlchemy", "Alembic", "JUnit", "Pytest"],
   },
   {
     title: "Databases",
@@ -45,12 +45,12 @@ const SKILL_CATEGORIES: SkillCategory[] = [
   {
     title: "CI/CD",
     icon: <RocketLaunchIcon />,
-    skills: ["GitHub Actions", "Docker", "Kubernetes"],
+    skills: ["GitHub Actions", "Docker"],
   },
   {
     title: "AI / ML",
     icon: <SmartToyIcon />,
-    skills: ["TensorFlow", "PyTorch", "AWS Bedrock", "Fine Tuning", "RAG"],
+    skills: ["TensorFlow", "PyTorch", "Fine Tuning", "RAG"],
   },
   {
     title: "Cloud",

@@ -12,9 +12,9 @@ import { useInView } from "../hooks/useInView";
 
 const HIGHLIGHTS = [
   { icon: <CodeIcon />, title: "Full-Stack", description: "React, Next.js, Spring Boot, FastAPI" },
-  { icon: <CloudIcon />, title: "Cloud Native", description: "AWS, Azure, Docker, Kubernetes" },
+  { icon: <CloudIcon />, title: "Cloud Native", description: "AWS, Azure, Docker, CI/CD" },
   { icon: <StorageIcon />, title: "Databases", description: "PostgreSQL, MySQL, SQL Server" },
-  { icon: <SmartToyIcon />, title: "AI / ML", description: "AWS Bedrock, RAG, Fine Tuning" },
+  { icon: <SmartToyIcon />, title: "AI / ML", description: "TensorFlow, PyTorch, RAG, Fine Tuning" },
 ];
 
 export default function About() {

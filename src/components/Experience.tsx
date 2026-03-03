@@ -28,6 +28,7 @@ const EXPERIENCES: ExperienceItem[] = [
       "Implemented AI-driven solutions utilizing AWS Bedrock, enhancing platform functionality with generative AI features.",
       "Established robust CI/CD pipelines, incorporating unit and integration tests using Pytest to ensure code quality.",
       "Designed database schema, used SQL Alchemy for ORM and managed database migrations with Alembic.",
+      "Authored technical documentation using Sphinx to support development and long-term maintainability.",
     ],
     tags: ["FastAPI", "Next.js", "PostgreSQL", "AWS", "Docker"],
   },
@@ -37,10 +38,9 @@ const EXPERIENCES: ExperienceItem[] = [
     location: "Houston, TX",
     period: "Apr 2024 – Jul 2024",
     bullets: [
-      "Conducted security research focused on intelligent traffic systems and connected vehicles, analyzing potential vulnerabilities.",
-      "Developed novel algorithms leveraging Vehicle-to-Everything (V2X) communication technology to enhance traffic safety.",
+      "Assisted in security research focused on intelligent traffic systems and connected vehicles, analyzing potential vulnerabilities.",
     ],
-    tags: ["Python", "Research", "V2X", "Security"],
+    tags: ["Python", "Research", "Security"],
   },
   {
     title: "Software Engineer",
@@ -48,8 +48,8 @@ const EXPERIENCES: ExperienceItem[] = [
     location: "Bangalore, India",
     period: "Aug 2022 – Jul 2023",
     bullets: [
-      "Enhanced enterprise applications by developing new features, testing applications and resolving bugs within a Spring Boot ecosystem.",
-      "Optimized code reliability by expanding unit test coverage and executing rigorous end-to-end manual testing for a CRM application.",
+      "Enhanced enterprise applications by testing applications and resolving bugs and adhering to Agile methodologies.",
+      "Optimized code reliability by expanding test coverage and end-to-end manual testing for a CRM application.",
     ],
     tags: ["Spring Boot", "Java", "Agile", "JUnit"],
   },
