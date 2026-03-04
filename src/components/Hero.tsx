@@ -2,10 +2,12 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import LaunchIcon from "@mui/icons-material/Launch";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TypeWriter from "./TypeWriter";
 
@@ -265,14 +267,65 @@ export default function Hero() {
               <Box sx={{ position: "relative", pl: 3, borderLeft: 2, borderColor: "rgba(6, 182, 212, 0.3)" }}>
                 {/* Timeline Item 1 */}
                 <Box 
-                  sx={{ position: "relative", mb: 0, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+                  sx={{ position: "relative", mb: 0, cursor: "pointer", "&:hover": { opacity: 0.8 }, pb: 1 }}
                   onClick={() => document.querySelector("#project-nlpdf")?.scrollIntoView({ behavior: "smooth" })}
                 >
                    <Box sx={{ position: "absolute", left: -31, top: 4, width: 10, height: 10, borderRadius: "50%", background: "#06b6d4", border: "2px solid rgba(15, 15, 26, 1)" }} />
                   <Typography variant="body2" sx={{ color: "text.primary" }}>
                     <Box component="span" sx={{ color: "secondary.light", mr: 1, fontWeight: 500 }}>NLPDF:</Box> 
                   </Typography>
-                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>AI-Powered PDF Processing Platform</Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block", mb: 1.5 }}>AI-Powered PDF Processing Platform</Typography>
+                  
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<GitHubIcon sx={{ fontSize: "1rem" }} />}
+                      component="a"
+                      href="https://github.com/lnandanapalli/nlpdf"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      sx={{
+                        borderColor: "rgba(99, 102, 241, 0.3)",
+                        color: "text.secondary",
+                        fontSize: "0.65rem",
+                        py: 0.25,
+                        px: 1,
+                        "&:hover": {
+                          borderColor: "primary.main",
+                          color: "primary.light",
+                          background: "rgba(99, 102, 241, 0.08)",
+                        },
+                      }}
+                    >
+                      Source
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<LaunchIcon sx={{ fontSize: "1rem" }} />}
+                      component="a"
+                      href="https://nlpdf.site"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      sx={{
+                        borderColor: "rgba(6, 182, 212, 0.3)",
+                        color: "text.secondary",
+                        fontSize: "0.65rem",
+                        py: 0.25,
+                        px: 1,
+                        "&:hover": {
+                          borderColor: "secondary.main",
+                          color: "secondary.light",
+                          background: "rgba(6, 182, 212, 0.08)",
+                        },
+                      }}
+                    >
+                      Visit Website
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
             </Box>
