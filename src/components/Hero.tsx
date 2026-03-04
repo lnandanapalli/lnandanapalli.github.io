@@ -80,114 +80,203 @@ export default function Hero() {
         }}
       />
 
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
-        <Box
-          sx={{
-            animation: "fadeInUp 1s ease-out",
-            "@keyframes fadeInUp": {
-              from: { opacity: 0, transform: "translateY(40px)" },
-              to: { opacity: 1, transform: "translateY(0)" },
-            },
-          }}
-        >
-          <Typography
-            variant="h6"
+      <Container maxWidth="xl" sx={{ position: "relative", zIndex: 1, px: { xs: 2.5, md: 4 } }}>
+        <Box sx={{ 
+          display: "flex", 
+          flexDirection: { xs: "column", md: "row" }, 
+          alignItems: "center",
+          gap: { xs: 6, md: 8 }
+        }}>
+          {/* Left Side: Main Introduction */}
+          <Box
             sx={{
-              color: "primary.light",
-              fontWeight: 500,
-              mb: 2,
-              fontSize: { xs: "1rem", md: "1.15rem" },
-              letterSpacing: 1,
+              flex: { xs: "1", md: "0 0 55%" },
+              animation: "fadeInUp 1s ease-out",
+              "@keyframes fadeInUp": {
+                from: { opacity: 0, transform: "translateY(40px)" },
+                to: { opacity: 1, transform: "translateY(0)" },
+              },
             }}
           >
-            Hello, I'm
-          </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                color: "primary.light",
+                fontWeight: 500,
+                mb: 2,
+                fontSize: { xs: "1rem", md: "1.15rem" },
+                letterSpacing: 1,
+              }}
+            >
+              Hello, I'm
+            </Typography>
 
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
-              fontWeight: 800,
-              background: "linear-gradient(135deg, #e2e8f0 0%, #6366f1 50%, #06b6d4 100%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              mb: 1,
-              lineHeight: 1.1,
-            }}
-          >
-            Lokeshwar Reddy
-          </Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
+                fontWeight: 800,
+                background: "linear-gradient(135deg, #e2e8f0 0%, #6366f1 50%, #06b6d4 100%)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                mb: 1,
+                lineHeight: 1.1,
+              }}
+            >
+              Lokeshwar Reddy
+            </Typography>
 
-          <Typography
-            variant="h1"
-            sx={{
-              fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
-              fontWeight: 800,
-              color: "text.primary",
-              mb: 3,
-              lineHeight: 1.1,
-            }}
-          >
-            Nandanapalli
-          </Typography>
+            <Typography
+              variant="h1"
+              sx={{
+                fontSize: { xs: "2.5rem", sm: "3.5rem", md: "4.5rem" },
+                fontWeight: 800,
+                color: "text.primary",
+                mb: 3,
+                lineHeight: 1.1,
+              }}
+            >
+              Nandanapalli
+            </Typography>
 
-          <Box sx={{ mb: 4, minHeight: { xs: 40, md: 50 } }}>
-            <TypeWriter
-              strings={[
-                "Software Engineer",
-                "Full-Stack Developer",
-                "Cloud & AI Enthusiast",
-              ]}
-              variant="h4"
+            <Box sx={{ mb: 4, minHeight: { xs: 40, md: 50 } }}>
+              <TypeWriter
+                strings={[
+                  "Software Engineer",
+                  "Full-Stack Developer",
+                  "Cloud & AI Enthusiast",
+                ]}
+                variant="h4"
+                sx={{
+                  color: "text.secondary",
+                  fontSize: { xs: "1.2rem", md: "1.8rem" },
+                  fontWeight: 400,
+                }}
+              />
+            </Box>
+
+            <Typography
+              variant="body1"
               sx={{
                 color: "text.secondary",
-                fontSize: { xs: "1.2rem", md: "1.8rem" },
-                fontWeight: 400,
+                maxWidth: 580,
+                mb: 5,
+                fontSize: { xs: "0.95rem", md: "1.05rem" },
+                lineHeight: 1.8,
               }}
-            />
+            >
+              Building robust, scalable web applications with modern technologies.
+              Passionate about clean code, great user experiences, and AI-driven solutions.
+            </Typography>
+
+            <Stack direction="row" spacing={1.5}>
+              {SOCIAL_LINKS.map((link) => (
+                <Tooltip key={link.label} title={link.label} arrow>
+                  <IconButton
+                    component="a"
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      color: "text.secondary",
+                      border: 1,
+                      borderColor: "rgba(99, 102, 241, 0.3)",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        color: "primary.light",
+                        borderColor: "primary.main",
+                        background: "rgba(99, 102, 241, 0.1)",
+                        transform: "translateY(-3px)",
+                      },
+                    }}
+                  >
+                    {link.icon}
+                  </IconButton>
+                </Tooltip>
+              ))}
+            </Stack>
           </Box>
 
-          <Typography
-            variant="body1"
+          {/* Right Side: Quick Profile Summary Timeline */}
+          <Box
             sx={{
-              color: "text.secondary",
-              maxWidth: 580,
-              mb: 5,
-              fontSize: { xs: "0.95rem", md: "1.05rem" },
-              lineHeight: 1.8,
+              flex: { xs: "1", md: "0 0 40%" },
+              animation: "fadeInUp 1s ease-out 0.3s backwards",
+              background: "rgba(15, 15, 26, 0.4)",
+              border: 1,
+              borderColor: "rgba(99, 102, 241, 0.2)",
+              borderRadius: 4,
+              p: { xs: 3, md: 4 },
+              backdropFilter: "blur(10px)",
+              width: "100%",
             }}
           >
-            Building robust, scalable web applications with modern technologies.
-            Passionate about clean code, great user experiences, and AI-driven solutions.
-          </Typography>
+            <Box>
+              <Typography variant="h6" sx={{ color: "primary.main", fontSize: "1.1rem", mb: 3, fontWeight: 600 }}>
+                Experience Timeline
+              </Typography>
+              <Box sx={{ position: "relative", pl: 3, borderLeft: 2, borderColor: "rgba(99, 102, 241, 0.3)" }}>
+                
+                {/* Timeline Item 1 */}
+                <Box 
+                  sx={{ position: "relative", mb: 3, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+                  onClick={() => document.querySelector("#experience-ecare")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  <Box sx={{ position: "absolute", left: -31, top: 4, width: 10, height: 10, borderRadius: "50%", background: "#6366f1", border: "2px solid rgba(15, 15, 26, 1)" }} />
+                  <Typography variant="body2" sx={{ color: "text.primary" }}>
+                    <Box component="span" sx={{ color: "primary.light", mr: 1, fontWeight: 500 }}>Software Developer Intern</Box> 
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>ECare • 2025</Typography>
+                </Box>
 
-          <Stack direction="row" spacing={1.5} sx={{ mb: 4 }}>
-            {SOCIAL_LINKS.map((link) => (
-              <Tooltip key={link.label} title={link.label} arrow>
-                <IconButton
-                  component="a"
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    color: "text.secondary",
-                    border: 1,
-                    borderColor: "rgba(99, 102, 241, 0.3)",
-                    transition: "all 0.3s ease",
-                    "&:hover": {
-                      color: "primary.light",
-                      borderColor: "primary.main",
-                      background: "rgba(99, 102, 241, 0.1)",
-                      transform: "translateY(-3px)",
-                    },
+                {/* Timeline Item 2 */}
+                <Box 
+                  sx={{ position: "relative", mb: 3, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+                  onClick={() => document.querySelector("#experience-uh")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                  <Box sx={{ position: "absolute", left: -31, top: 4, width: 10, height: 10, borderRadius: "50%", background: "#06b6d4", border: "2px solid rgba(15, 15, 26, 1)" }} />
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Box component="span" sx={{ color: "text.primary", mr: 1, fontWeight: 500 }}>Research Assistant</Box> 
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>Univ. of Houston • 2024</Typography>
+                </Box>
+
+                {/* Timeline Item 3 */}
+                <Box 
+                  sx={{ position: "relative", mb: 0, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+                  onClick={() => {
+                    document.querySelector("#experience-cognizant1")?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
-                  {link.icon}
-                </IconButton>
-              </Tooltip>
-            ))}
-          </Stack>
+                  <Box sx={{ position: "absolute", left: -31, top: 4, width: 10, height: 10, borderRadius: "50%", background: "#8b5cf6", border: "2px solid rgba(15, 15, 26, 1)" }} />
+                  <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Box component="span" sx={{ color: "text.primary", mr: 1, fontWeight: 500 }}>Software Engineer</Box>
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>Cognizant • 2022-2023</Typography>
+                </Box>
+              </Box>
+            </Box>
+
+             <Box sx={{ mt: 5 }}>
+              <Typography variant="h6" sx={{ color: "secondary.main", fontSize: "1.1rem", mb: 3, fontWeight: 600 }}>
+                Featured Projects
+              </Typography>
+              <Box sx={{ position: "relative", pl: 3, borderLeft: 2, borderColor: "rgba(6, 182, 212, 0.3)" }}>
+                {/* Timeline Item 1 */}
+                <Box 
+                  sx={{ position: "relative", mb: 0, cursor: "pointer", "&:hover": { opacity: 0.8 } }}
+                  onClick={() => document.querySelector("#project-nlpdf")?.scrollIntoView({ behavior: "smooth" })}
+                >
+                   <Box sx={{ position: "absolute", left: -31, top: 4, width: 10, height: 10, borderRadius: "50%", background: "#06b6d4", border: "2px solid rgba(15, 15, 26, 1)" }} />
+                  <Typography variant="body2" sx={{ color: "text.primary" }}>
+                    <Box component="span" sx={{ color: "secondary.light", mr: 1, fontWeight: 500 }}>NLPDF:</Box> 
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: "text.secondary", display: "block" }}>AI-Powered PDF Processing Platform</Typography>
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Box>
       </Container>
 

@@ -13,6 +13,7 @@ interface ExperienceItem {
   period: string;
   bullets: string[];
   tags: string[];
+  id?: string;
 }
 
 const EXPERIENCES: ExperienceItem[] = [
@@ -31,6 +32,7 @@ const EXPERIENCES: ExperienceItem[] = [
       "Authored technical documentation using Sphinx to support development and long-term maintainability.",
     ],
     tags: ["FastAPI", "Next.js", "PostgreSQL", "AWS", "Docker"],
+    id: "experience-ecare",
   },
   {
     title: "Research Assistant",
@@ -41,6 +43,7 @@ const EXPERIENCES: ExperienceItem[] = [
       "Assisted in security research focused on intelligent traffic systems and connected vehicles, analyzing potential vulnerabilities.",
     ],
     tags: ["Python", "Research", "Security"],
+    id: "experience-uh",
   },
   {
     title: "Software Engineer",
@@ -52,6 +55,7 @@ const EXPERIENCES: ExperienceItem[] = [
       "Optimized code reliability by expanding test coverage and end-to-end manual testing for a CRM application.",
     ],
     tags: ["Spring Boot", "Java", "Agile", "JUnit"],
+    id: "experience-cognizant1",
   },
   {
     title: "Programmer Analyst Trainee",
@@ -63,6 +67,7 @@ const EXPERIENCES: ExperienceItem[] = [
       "Built a CRUD application as a capstone project, demonstrating proficiency in RESTful API development and databases.",
     ],
     tags: ["React", "Spring Boot", "SQL", "HTML/CSS"],
+    id: "experience-cognizant2",
   },
 ];
 
@@ -72,6 +77,7 @@ function ExperienceCard({ item, index }: { item: ExperienceItem; index: number }
   return (
     <Box
       ref={ref}
+      id={item.id}
       sx={{
         position: "relative",
         pl: { xs: 4, md: 5 },

@@ -18,6 +18,7 @@ interface Project {
   tags: string[];
   github?: string;
   live?: string;
+  id?: string;
 }
 
 const PROJECTS: Project[] = [
@@ -30,10 +31,12 @@ const PROJECTS: Project[] = [
       "Implemented production-grade auth: JWTs with refresh token rotation and JTI revocation, CSRF double-submit protection, email OTP verification, Argon2id hashing, Cloudflare Turnstile CAPTCHA, and IP rate limiting.",
       "Developed a fully async Python backend with FastAPI, SQLAlchemy async sessions, and Alembic migrations on SQL Server, with 150+ tests covering auth, security, LLM parsing, and PDF operations.",
       "Created a React 19 TypeScript frontend with cookie-based auth, automatic silent token refresh via Axios interceptors, drag-and-drop file upload, and natural language command input.",
-      "Containerized the backend with Docker and deployed on Azure App Service and hosted frontend on Azure Static Web Apps.",
+      "Containerized the backend and frontend using Docker, deployed on Azure App Service and connected with Azure SQL"
     ],
     tags: ["React", "FastAPI", "TypeScript", "SQL Server", "Docker", "Azure", "LLMs"],
     github: "https://github.com/lnandanapalli/nlpdf",
+    live: "https://nlpdf.site",
+    id: "project-nlpdf",
   },
 ];
 
@@ -41,7 +44,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const { ref, isInView } = useInView();
 
   return (
-    <Grid size={{ xs: 12, md: 8 }} ref={ref}>
+    <Grid size={{ xs: 12, md: 8 }} ref={ref} id={project.id}>
       <Paper
         elevation={0}
         sx={{
@@ -163,7 +166,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 },
               }}
             >
-              Live Demo
+              Visit Website
             </Button>
           )}
         </Box>
