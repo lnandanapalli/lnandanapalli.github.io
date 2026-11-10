@@ -59,7 +59,7 @@ export default function Hero({ ready }: { ready: boolean }) {
         <ParticleName text="LOKESHWAR" ready={ready} />
         <div className="hero-sub">
           <span className="serif">Reddy Nandanapalli</span>
-          <span className="mono hide-sm">— hover to light it up. click to scatter. ↑</span>
+          <span className="mono hide-sm">— hover to light it up ↑</span>
         </div>
       </div>
 

@@ -9,7 +9,7 @@ interface Props {
 
 /**
  * Renders `text` as a field of a few thousand particles. They spring back to
- * their letter shapes, get shoved around by the pointer and explode on click.
+ * their letter shapes, light up under the pointer.
  */
 export default function ParticleName({ text, ready }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -167,21 +167,6 @@ export default function ParticleName({ text, ready }: Props) {
       mouse.active = mouse.y > -100 && mouse.y < r.height + 100;
     };
     const onLeave = () => (mouse.active = false);
-    const onDown = (e: PointerEvent) => {
-      const r = canvas.getBoundingClientRect();
-      const cx = e.clientX - r.left;
-      const cy = e.clientY - r.top;
-      if (cy < -50 || cy > r.height + 50) return;
-      for (let i = 0; i < n; i++) {
-        const dx = x[i] - cx;
-        const dy = y[i] - cy;
-        const d = Math.sqrt(dx * dx + dy * dy) || 1;
-        const f = Math.min(60, 9000 / (d + 30));
-        vx[i] += (dx / d) * f * (0.6 + Math.random() * 0.8);
-        vy[i] += (dy / d) * f * (0.6 + Math.random() * 0.8);
-      }
-    };
-
     let resizeTimer = 0;
     const onResize = () => {
       clearTimeout(resizeTimer);
@@ -203,7 +188,6 @@ export default function ParticleName({ text, ready }: Props) {
 
     if (!reduced) {
       window.addEventListener("pointermove", onMove, { passive: true });
-      window.addEventListener("pointerdown", onDown);
       document.addEventListener("pointerleave", onLeave);
     }
     window.addEventListener("resize", onResize);
@@ -213,7 +197,6 @@ export default function ParticleName({ text, ready }: Props) {
       clearTimeout(resizeTimer);
       io.disconnect();
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerdown", onDown);
       document.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("resize", onResize);
     };
