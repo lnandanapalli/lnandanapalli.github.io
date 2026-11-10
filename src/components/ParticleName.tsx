@@ -3,15 +3,20 @@ import { prefersReducedMotion } from "../lib/motion";
 
 interface Props {
   text: string;
+  /** smaller second line, rendered in dots right under `text` */
+  sub?: string;
   /** set to true to make the particles fly in */
   ready: boolean;
 }
 
+const DOT = "#ecebe6";
+
 /**
- * Renders `text` as a field of a few thousand particles. They spring back to
- * their letter shapes, light up under the pointer.
+ * Renders `text` (and an optional `sub` line) as a field of particles that
+ * spring into their letter shapes and light up under the pointer, over a
+ * dotted "matrix rain" background.
  */
-export default function ParticleName({ text, ready }: Props) {
+export default function ParticleName({ text, sub, ready }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const readyRef = useRef(ready);
 
@@ -35,9 +40,19 @@ export default function ParticleName({ text, ready }: Props) {
     let y = new Float32Array(0);
     let vx = new Float32Array(0);
     let vy = new Float32Array(0);
+    let sz = new Float32Array(0);
     let tone = new Uint8Array(0);
-    let size = 2;
     let fontSize = 100;
+
+    // matrix rain: one falling trail of dots per column
+    let cell = 8;
+    let rainDot = 2;
+    let cols = 0;
+    let rows = 0;
+    let rY = new Float32Array(0);
+    let rV = new Float32Array(0);
+    let rL = new Uint8Array(0);
+
     const mouse = { x: -9999, y: -9999, active: false };
     let visible = true;
     let id = 0;
@@ -47,6 +62,12 @@ export default function ParticleName({ text, ready }: Props) {
 
     const accent = () =>
       getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#c8ff2e";
+
+    const resetDrop = (c: number, anywhere: boolean) => {
+      rL[c] = 6 + Math.floor(Math.random() * 18);
+      rY[c] = anywhere ? Math.random() * (rows + rL[c]) : -Math.random() * rows * 0.8;
+      rV[c] = 0.12 + Math.random() * 0.32;
+    };
 
     const build = () => {
       const rect = canvas.getBoundingClientRect();
@@ -62,35 +83,67 @@ export default function ParticleName({ text, ready }: Props) {
       off.height = Math.ceil(h);
       const o = off.getContext("2d", { willReadFrequently: true });
       if (!o) return;
-      const font = (fs: number) => `800 ${fs}px Syne, "Arial Black", sans-serif`;
-      o.font = font(100);
-      const per100 = o.measureText(text).width / 100;
-      fontSize = Math.min((w * 0.96) / per100, h * 0.82);
-      o.fillStyle = "#fff";
-      o.font = font(fontSize);
+      const font = (weight: number, fs: number) => `${weight} ${fs}px Syne, "Arial Black", sans-serif`;
       o.textAlign = "center";
       o.textBaseline = "middle";
-      o.fillText(text, w / 2, h / 2);
+      o.fillStyle = "#fff";
 
-      const gap = Math.max(3, Math.round(fontSize / 34));
-      size = Math.max(1.4, gap * 0.62);
-      const data = o.getImageData(0, 0, off.width, off.height).data;
+      // size the two lines: the name fills the width, the sub line sits close under it
+      o.font = font(800, 100);
+      const per1 = o.measureText(text).width / 100;
+      fontSize = Math.min((w * 0.92) / per1, h * 0.6);
+      const mainW = per1 * fontSize;
+      let fs2 = 0;
+      if (sub) {
+        o.font = font(700, 100);
+        const per2 = o.measureText(sub).width / 100;
+        // on narrow screens the sub line gets relatively bigger so its dots stay legible
+        const narrow = w < 700;
+        fs2 = Math.min(((narrow ? w * 0.9 : mainW * 0.78) / per2), fontSize * (narrow ? 0.55 : 0.36));
+      }
+      const capH1 = fontSize * 0.72;
+      const capH2 = fs2 * 0.72;
+      const spacing = sub ? fontSize * 0.2 : 0;
+      const top = (h - (capH1 + spacing + capH2)) / 2;
+      const y1 = top + capH1 / 2;
+      const y2 = top + capH1 + spacing + capH2 / 2;
+
       const px: number[] = [];
       const py: number[] = [];
-      for (let yy = 0; yy < off.height; yy += gap) {
-        for (let xx = 0; xx < off.width; xx += gap) {
-          if (data[(yy * off.width + xx) * 4 + 3] > 140) {
-            px.push(xx);
-            py.push(yy);
+      const ps: number[] = [];
+      const sample = (gap: number, dot: number) => {
+        const data = o.getImageData(0, 0, off.width, off.height).data;
+        for (let yy = 0; yy < off.height; yy += gap) {
+          for (let xx = 0; xx < off.width; xx += gap) {
+            if (data[(yy * off.width + xx) * 4 + 3] > 140) {
+              px.push(xx);
+              py.push(yy);
+              ps.push(dot);
+            }
           }
         }
+        o.clearRect(0, 0, off.width, off.height);
+      };
+
+      const gap1 = Math.max(3, Math.round(fontSize / 34));
+      const dot1 = Math.max(1.4, gap1 * 0.62);
+      o.font = font(800, fontSize);
+      o.fillText(text, w / 2, y1);
+      sample(gap1, dot1);
+      if (sub) {
+        const gap2 = Math.max(2, Math.round(fs2 / 13));
+        o.font = font(700, fs2);
+        o.fillText(sub, w / 2, y2);
+        sample(gap2, Math.max(1.2, gap2 * 0.66));
       }
+
       const prevN = n;
       const prevX = x;
       const prevY = y;
       n = px.length;
       hx = Float32Array.from(px);
       hy = Float32Array.from(py);
+      sz = Float32Array.from(ps);
       x = new Float32Array(n);
       y = new Float32Array(n);
       vx = new Float32Array(n);
@@ -112,6 +165,15 @@ export default function ParticleName({ text, ready }: Props) {
         }
         tone[i] = Math.random() < 0.09 ? 1 : 0;
       }
+
+      cell = gap1 * 2.4;
+      rainDot = Math.max(1.2, dot1 * 0.8);
+      cols = Math.ceil(w / cell);
+      rows = Math.ceil(h / cell);
+      rY = new Float32Array(cols);
+      rV = new Float32Array(cols);
+      rL = new Uint8Array(cols);
+      for (let c = 0; c < cols; c++) resetDrop(c, true);
     };
 
     const step = () => {
@@ -130,12 +192,38 @@ export default function ParticleName({ text, ready }: Props) {
         x[i] += vx[i];
         y[i] += vy[i];
       }
+      for (let c = 0; c < cols; c++) {
+        rY[c] += rV[c];
+        if (rY[c] - rL[c] > rows) resetDrop(c, false);
+      }
+    };
+
+    const drawRain = () => {
+      for (let c = 0; c < cols; c++) {
+        const head = Math.floor(rY[c]);
+        const len = rL[c];
+        const cx = c * cell + (cell - rainDot) / 2;
+        for (let k = 0; k < len; k++) {
+          const r = head - k;
+          if (r < 0 || r > rows) continue;
+          if (k === 0) {
+            ctx.globalAlpha = 0.55;
+            ctx.fillStyle = accentColor;
+          } else {
+            ctx.globalAlpha = 0.22 * (1 - k / len);
+            ctx.fillStyle = DOT;
+          }
+          ctx.fillRect(cx, r * cell, rainDot, rainDot);
+        }
+      }
+      ctx.globalAlpha = 1;
     };
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
       if (t % 30 === 1 || !accentColor) accentColor = accent();
-      // particles near the pointer light up in the accent colour instead of moving away
+      if (!reduced) drawRain();
+      // particles near the pointer light up in the accent colour
       const R = Math.max(60, fontSize * 0.6);
       const R2 = R * R;
       const lit = (i: number) => {
@@ -145,10 +233,10 @@ export default function ParticleName({ text, ready }: Props) {
         const dy = y[i] - mouse.y;
         return dx * dx + dy * dy < R2;
       };
-      ctx.fillStyle = "#ecebe6";
-      for (let i = 0; i < n; i++) if (!lit(i)) ctx.fillRect(x[i], y[i], size, size);
+      ctx.fillStyle = DOT;
+      for (let i = 0; i < n; i++) if (!lit(i)) ctx.fillRect(x[i], y[i], sz[i], sz[i]);
       ctx.fillStyle = accentColor;
-      for (let i = 0; i < n; i++) if (lit(i)) ctx.fillRect(x[i], y[i], size, size);
+      for (let i = 0; i < n; i++) if (lit(i)) ctx.fillRect(x[i], y[i], sz[i], sz[i]);
     };
 
     const loop = () => {
@@ -200,7 +288,7 @@ export default function ParticleName({ text, ready }: Props) {
       document.removeEventListener("pointerleave", onLeave);
       window.removeEventListener("resize", onResize);
     };
-  }, [text]);
+  }, [text, sub]);
 
-  return <canvas ref={canvasRef} className="particle-name" role="img" aria-label={text} />;
+  return <canvas ref={canvasRef} className="particle-name" role="img" aria-label={sub ? `${text} ${sub}` : text} />;
 }
