@@ -10,14 +10,21 @@ function HoustonClock() {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
-  const time = now.toLocaleTimeString("en-US", {
+  // e.g. "23:25:44 CST" (switches to CDT automatically during daylight saving)
+  const parts = new Intl.DateTimeFormat("en-US", {
     timeZone: "America/Chicago",
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-    hour12: false,
-  });
-  return <span className="mono">HTX {time}</span>;
+    hourCycle: "h23",
+    timeZoneName: "short",
+  }).formatToParts(now);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  return (
+    <span className="mono">
+      {get("hour")}:{get("minute")}:{get("second")} {get("timeZoneName")}
+    </span>
+  );
 }
 
 function RotatingRole() {
@@ -48,17 +55,28 @@ export default function Hero({ ready }: { ready: boolean }) {
   return (
     <section id="hero" className={`hero ${ready ? "ready" : ""}`}>
       <div className="hero-meta">
-        <span className="pill">
+        <span className="pill hide-sm">
           <i className="dot-live" /> AI Software Engineer
         </span>
-        <span className="mono hide-sm">29.76° N, 95.37° W</span>
+        <span className="hero-loc">
+          <span className="mono hide-sm">29.76° N, 95.37° W</span>
+          <a
+            className="locate mono"
+            href="https://www.google.com/maps/search/?api=1&query=Houston%2C%20TX"
+            target="_blank"
+            rel="noreferrer"
+            data-cursor="map"
+            aria-label="Show Houston, TX on Google Maps"
+          >
+            <i aria-hidden /> Locate
+          </a>
+        </span>
         <HoustonClock />
       </div>
 
       <div className="hero-stage">
-        <ParticleName text="LOKESHWAR" ready={ready} />
+        <ParticleName text="LOKESHWAR" sub="REDDY NANDANAPALLI" ready={ready} />
         <div className="hero-sub">
-          <span className="serif">Reddy Nandanapalli</span>
           <span className="mono hide-sm">— hover to light it up ↑</span>
         </div>
       </div>

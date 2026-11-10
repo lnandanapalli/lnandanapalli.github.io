@@ -475,13 +475,56 @@ html.menu-open .nav .logo {
   min-height: 0;
 }
 .particle-name {
-  width: 100%;
-  height: clamp(140px, 30vw, 420px);
+  width: calc(100% + var(--gutter) * 2);
+  margin: 0 calc(var(--gutter) * -1);
+  height: clamp(200px, 36vw, 500px);
   display: block;
+  -webkit-mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+}
+.hero-loc {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+.locate {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  padding: 6px 12px 6px 10px;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.locate i {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+}
+.locate i::after {
+  content: "";
+  position: absolute;
+  inset: 2.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: ping 2s infinite;
+}
+.locate:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--ink);
+}
+.locate:hover i {
+  border-color: var(--ink);
+}
+.locate:hover i::after {
+  background: var(--ink);
 }
 .hero-sub {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: baseline;
   margin-top: 4px;
   opacity: 0;
