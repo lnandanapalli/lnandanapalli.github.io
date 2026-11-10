@@ -40,7 +40,6 @@ export default function Contact() {
       </div>
       <footer className="footer mono">
         <span>© 2026 Lokeshwar Reddy Nandanapalli</span>
-        <span className="hide-sm">Built with React, Canvas &amp; too much requestAnimationFrame</span>
         <button onClick={() => scrollToId("hero")} data-magnetic="0.3">
           Back to top ↑
         </button>
