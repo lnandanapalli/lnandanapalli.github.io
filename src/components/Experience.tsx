@@ -6,6 +6,14 @@ import { useScrollProgress } from "../lib/motion";
  * Vertical scroll drives a horizontal track of roles while the section is pinned.
  * On narrow screens it degrades to a plain stacked list.
  */
+/** How far the track must travel so its last panel ends fully on screen. */
+function travel(t: HTMLElement) {
+  const last = t.lastElementChild as HTMLElement | null;
+  const end = last ? last.offsetLeft + last.offsetWidth : t.scrollWidth;
+  const pad = parseFloat(getComputedStyle(t).paddingLeft) || 0;
+  return Math.max(0, end + pad - window.innerWidth);
+}
+
 export default function Experience() {
   const pin = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -18,7 +26,7 @@ export default function Experience() {
     const mq = window.matchMedia("(min-width: 900px)");
     const size = () => {
       if (mq.matches) {
-        const dist = t.scrollWidth - window.innerWidth;
+        const dist = travel(t);
         p.style.height = `${dist + window.innerHeight}px`;
       } else {
         p.style.height = "";
@@ -41,7 +49,7 @@ export default function Experience() {
   const onProgress = useCallback((prog: number) => {
     const t = track.current;
     if (!t || !window.matchMedia("(min-width: 900px)").matches) return;
-    const dist = t.scrollWidth - window.innerWidth;
+    const dist = travel(t);
     t.style.transform = `translate3d(${-prog * dist}px,0,0)`;
     if (line.current) line.current.style.transform = `scaleX(${prog})`;
     t.querySelectorAll<HTMLElement>(".job").forEach((card) => {
