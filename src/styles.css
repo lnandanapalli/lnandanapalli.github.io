@@ -790,6 +790,7 @@ html.menu-open .nav .logo {
   flex: none;
   width: min(480px, 80vw);
   min-height: 560px;
+  container-type: inline-size;
   position: relative;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -828,7 +829,7 @@ html.menu-open .nav .logo {
   font-family: var(--display);
   font-weight: 800;
   text-transform: uppercase;
-  font-size: clamp(26px, 7.4vw, 48px);
+  font-size: min(40px, 9.2cqi);
   letter-spacing: -0.04em;
   line-height: 0.95;
   margin: 38px 0 8px;
@@ -886,7 +887,8 @@ html.menu-open .nav .logo {
 }
 .exp-end {
   flex: none;
-  width: 40vw;
+  width: auto;
+  padding-right: 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
