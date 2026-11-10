@@ -1,220 +1,111 @@
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Chip from "@mui/material/Chip";
-import SectionTitle from "./SectionTitle";
-import { useInView } from "../hooks/useInView";
+import { useCallback, useEffect, useRef } from "react";
+import { JOBS } from "../data";
+import { useScrollProgress } from "../lib/motion";
 
-interface ExperienceItem {
-  title: string;
-  company: string;
-  location: string;
-  period: string;
-  bullets: string[];
-  tags: string[];
-  id?: string;
-}
-
-const EXPERIENCES: ExperienceItem[] = [
-  {
-    title: "Software Developer Intern",
-    company: "ECare",
-    location: "Houston, TX",
-    period: "Jul 2025 – Dec 2025",
-    bullets: [
-      "Architected and developed a multi-tenant healthcare SaaS platform using FastAPI, Next.js, and PostgreSQL.",
-      "Engineered real-time communication features by integrating AWS Chime SDK, enabling call capabilities.",
-      "Designed and implemented Role-Based Access Control (RBAC) mechanisms using JWT, securing multi-tenant architecture.",
-      "Implemented AI-driven solutions utilizing AWS Bedrock, enhancing platform functionality with generative AI features.",
-      "Established robust CI/CD pipelines, incorporating unit and integration tests using Pytest to ensure code quality.",
-      "Designed database schema, used SQL Alchemy for ORM and managed database migrations with Alembic.",
-      "Authored technical documentation using Sphinx to support development and long-term maintainability.",
-    ],
-    tags: ["FastAPI", "Next.js", "PostgreSQL", "AWS", "Docker"],
-    id: "experience-ecare",
-  },
-  {
-    title: "Research Assistant",
-    company: "University of Houston",
-    location: "Houston, TX",
-    period: "Apr 2024 – Jul 2024",
-    bullets: [
-      "Assisted in security research focused on intelligent traffic systems and connected vehicles, analyzing potential vulnerabilities.",
-    ],
-    tags: ["Python", "Research", "Security"],
-    id: "experience-uh",
-  },
-  {
-    title: "Software Engineer",
-    company: "Cognizant Technology Solutions",
-    location: "Bangalore, India",
-    period: "Aug 2022 – Jul 2023",
-    bullets: [
-      "Enhanced enterprise applications by testing applications and resolving bugs and adhering to Agile methodologies.",
-      "Optimized code reliability by expanding test coverage and end-to-end manual testing for a CRM application.",
-    ],
-    tags: ["Spring Boot", "Java", "Agile", "JUnit"],
-    id: "experience-cognizant1",
-  },
-  {
-    title: "Programmer Analyst Trainee",
-    company: "Cognizant Technology Solutions",
-    location: "Bangalore, India",
-    period: "Feb 2022 – Jul 2022",
-    bullets: [
-      "Built full-stack web applications during training, mastering HTML, CSS, React, Spring Boot, and SQL.",
-      "Built a CRUD application as a capstone project, demonstrating proficiency in RESTful API development and databases.",
-    ],
-    tags: ["React", "Spring Boot", "SQL", "HTML/CSS"],
-    id: "experience-cognizant2",
-  },
-];
-
-function ExperienceCard({ item, index }: { item: ExperienceItem; index: number }) {
-  const { ref, isInView } = useInView(0.1);
-
-  return (
-    <Box
-      ref={ref}
-      id={item.id}
-      sx={{
-        position: "relative",
-        pl: { xs: 4, md: 5 },
-        pb: 6,
-        "&::before": {
-          content: '""',
-          position: "absolute",
-          left: { xs: 6, md: 8 },
-          top: 0,
-          bottom: 0,
-          width: 2,
-          background: "linear-gradient(180deg, #6366f1, rgba(6, 182, 212, 0.3))",
-        },
-        "&:last-child::before": {
-          background: "linear-gradient(180deg, #6366f1, transparent)",
-        },
-        "&:last-child": { pb: 0 },
-      }}
-    >
-      {/* Timeline dot */}
-      <Box
-        sx={{
-          position: "absolute",
-          left: { xs: 1, md: 3 },
-          top: 0,
-          width: 12,
-          height: 12,
-          borderRadius: "50%",
-          background: isInView ? "#6366f1" : "transparent",
-          border: 2,
-          borderColor: "primary.main",
-          transition: "all 0.4s ease",
-          boxShadow: isInView ? "0 0 12px rgba(99, 102, 241, 0.5)" : "none",
-        }}
-      />
-
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 2.5, md: 3.5 },
-          border: 1,
-          borderColor: "divider",
-          background: "rgba(15, 15, 26, 0.5)",
-          backdropFilter: "blur(10px)",
-          opacity: isInView ? 1 : 0,
-          transform: isInView ? "translateX(0)" : "translateX(40px)",
-          transition: `all 0.7s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.1}s`,
-          "&:hover": {
-            borderColor: "primary.dark",
-            background: "rgba(99, 102, 241, 0.04)",
-          },
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            justifyContent: "space-between",
-            alignItems: { sm: "center" },
-            mb: 1.5,
-            gap: 1,
-          }}
-        >
-          <Box>
-            <Typography variant="h6" sx={{ fontSize: { xs: "1rem", md: "1.15rem" } }}>
-              {item.title}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                color: "primary.light",
-                fontWeight: 500,
-              }}
-            >
-              {item.company} · {item.location}
-            </Typography>
-          </Box>
-          <Chip
-            label={item.period}
-            size="small"
-            variant="outlined"
-            sx={{
-              borderColor: "rgba(99, 102, 241, 0.3)",
-              color: "text.secondary",
-              alignSelf: { xs: "flex-start", sm: "center" },
-              fontSize: "0.75rem",
-            }}
-          />
-        </Box>
-
-        <Box component="ul" sx={{ pl: 2, mb: 2, mt: 0 }}>
-          {item.bullets.map((bullet, i) => (
-            <Typography
-              key={i}
-              component="li"
-              variant="body2"
-              sx={{ color: "text.secondary", mb: 0.75, lineHeight: 1.7 }}
-            >
-              {bullet}
-            </Typography>
-          ))}
-        </Box>
-
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
-          {item.tags.map((tag) => (
-            <Chip
-              key={tag}
-              label={tag}
-              size="small"
-              sx={{
-                background: "rgba(99, 102, 241, 0.1)",
-                color: "primary.light",
-                fontSize: "0.72rem",
-                height: 26,
-              }}
-            />
-          ))}
-        </Box>
-      </Paper>
-    </Box>
-  );
-}
-
+/**
+ * Vertical scroll drives a horizontal track of roles while the section is pinned.
+ * On narrow screens it degrades to a plain stacked list.
+ */
 export default function Experience() {
+  const pin = useRef<HTMLDivElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+  const line = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const p = pin.current;
+    const t = track.current;
+    if (!p || !t) return;
+    const mq = window.matchMedia("(min-width: 900px)");
+    const size = () => {
+      if (mq.matches) {
+        const dist = t.scrollWidth - window.innerWidth;
+        p.style.height = `${dist + window.innerHeight}px`;
+      } else {
+        p.style.height = "";
+        t.style.transform = "";
+      }
+      window.dispatchEvent(new Event("scroll"));
+    };
+    size();
+    const ro = new ResizeObserver(size);
+    ro.observe(t);
+    mq.addEventListener("change", size);
+    window.addEventListener("resize", size);
+    return () => {
+      ro.disconnect();
+      mq.removeEventListener("change", size);
+      window.removeEventListener("resize", size);
+    };
+  }, []);
+
+  const onProgress = useCallback((prog: number) => {
+    const t = track.current;
+    if (!t || !window.matchMedia("(min-width: 900px)").matches) return;
+    const dist = t.scrollWidth - window.innerWidth;
+    t.style.transform = `translate3d(${-prog * dist}px,0,0)`;
+    if (line.current) line.current.style.transform = `scaleX(${prog})`;
+    t.querySelectorAll<HTMLElement>(".job").forEach((card) => {
+      const r = card.getBoundingClientRect();
+      const c = (r.left + r.width / 2) / window.innerWidth; // 0..1 across the viewport
+      const off = Math.max(-1, Math.min(1, (c - 0.5) * 2));
+      card.style.setProperty("--off", off.toFixed(3));
+    });
+  }, []);
+  useScrollProgress(pin, onProgress);
+
   return (
-    <Box id="experience" sx={{ py: { xs: 10, md: 14 }, background: "rgba(15, 15, 26, 0.3)" }}>
-      <Container maxWidth="md">
-        <SectionTitle
-          title="Experience"
-          subtitle="My professional journey and contributions"
-        />
-        <Box>
-          {EXPERIENCES.map((item, index) => (
-            <ExperienceCard key={item.title + item.company} item={item} index={index} />
-          ))}
-        </Box>
-      </Container>
-    </Box>
+    <section id="experience" className="exp">
+      <div className="exp-pin" ref={pin}>
+        <div className="exp-sticky">
+          <div className="exp-track" ref={track}>
+            <div className="exp-intro">
+              <div className="section-label mono">
+                <span>(02)</span> Experience
+              </div>
+              <h2 className="display">
+                Where I've
+                <br />
+                <em className="serif">shipped</em> things.
+              </h2>
+              <p className="mono muted">2022 → now · keep scrolling →</p>
+            </div>
+            {JOBS.map((j, i) => (
+              <article key={j.role + j.period} className="job" data-cursor="read">
+                <div className="job-top mono">
+                  <span>{String(i + 1).padStart(2, "0")}</span>
+                  <span>{j.period}</span>
+                </div>
+                <h3 className="job-co">{j.company}</h3>
+                <div className="job-role">
+                  <span className="serif">{j.role}</span> <span className="mono muted">/ {j.place}</span>
+                </div>
+                <ul className="job-pts">
+                  {j.points.map((pt) => (
+                    <li key={pt}>{pt}</li>
+                  ))}
+                </ul>
+                <div className="tags">
+                  {j.stack.map((s) => (
+                    <span key={s} className="tag">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+                <div className="job-num" aria-hidden>
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+              </article>
+            ))}
+            <div className="exp-end" aria-hidden>
+              <span className="serif">and counting</span>
+              <span className="display">→</span>
+            </div>
+          </div>
+          <div className="exp-line">
+            <div ref={line} />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
