@@ -67,7 +67,7 @@ export default function Hero({ ready }: { ready: boolean }) {
         <p className="hero-lede">
           I build <RotatingRole />
           <br />
-          that turn plain language into software that actually runs.
+          AI software engineer · Houston, TX
         </p>
         <CommandBar />
       </div>

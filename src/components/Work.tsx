@@ -162,9 +162,6 @@ export default function Work() {
         <h2 className="giant" data-reveal>
           <span className="outline-text">NL</span>PDF
         </h2>
-        <p className="work-sub serif" data-reveal>
-          “Just tell the PDF what to do.”
-        </p>
       </div>
 
       <div className="work-card" ref={card} onPointerMove={onMove} onPointerLeave={onLeave}>

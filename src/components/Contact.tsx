@@ -7,20 +7,18 @@ export default function Contact() {
   const linkedin = LINKS.find((l) => l.label === "LinkedIn")!;
   return (
     <section id="contact" className="contact">
-      <Marquee items={["Let's build something", "Let's build something"]} outline />
+      <Marquee items={["Contact", "Contact", "Contact"]} outline />
       <div className="contact-inner">
         <div className="section-label mono">
           <span>(06)</span> Contact
         </div>
         <h2 className="display" data-reveal>
-          Got an idea that needs
-          <br />
-          an <em className="serif">AI that behaves?</em>
+          Get in <em className="serif">touch</em>
         </h2>
         <div className="contact-row">
-          <a className="blob" href={linkedin.href} target="_blank" rel="noreferrer" data-magnetic="0.4" data-cursor="hi!">
+          <a className="blob" href={linkedin.href} target="_blank" rel="noreferrer" data-magnetic="0.4" data-cursor="open">
             <span>
-              Say hi
+              Connect
               <br />
               on LinkedIn
             </span>

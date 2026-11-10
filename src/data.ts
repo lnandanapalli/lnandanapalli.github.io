@@ -32,8 +32,8 @@ export const JOBS: Job[] = [
     place: "Houston, TX",
     period: "Jan 2026 — Now",
     points: [
-      "Built a RAG-based AI chatbot answering patient & clinic healthcare queries — patient safety first.",
-      "Architected a layered security pipeline: a filtering model catches deceptive messages before they ever reach the RAG model.",
+      "Built a RAG-based AI chatbot for patient and clinic healthcare queries, prioritizing patient safety.",
+      "Architected a layered security pipeline: a filtering model catches deceptive messages before they reach the RAG model.",
       "Code-reviewed an LMS platform (ASP.NET, Next.js) used to onboard and train clinic staff.",
       "Containerized and shipped the LMS to Azure App Service after regression testing.",
     ],
@@ -70,7 +70,7 @@ export const JOBS: Job[] = [
     period: "Aug 2022 — Jul 2023",
     points: [
       "Improved enterprise app stability by fixing bugs in a Spring Boot + JSP application.",
-      "Hit 99% reliability with end-to-end testing on a custom Salesforce CRM application.",
+      "Achieved 99% reliability with end-to-end testing on a custom Salesforce CRM application.",
     ],
     stack: ["Java", "Spring Boot", "JSP", "Salesforce"],
   },
@@ -90,12 +90,12 @@ export const NLPDF = {
   live: "https://nlpdf.site",
   github: "https://github.com/lnandanapalli/nlpdf",
   blurb:
-    "Type what you want done to your PDFs in plain English. Llama 3.1 turns it into a validated chain of operations that runs server-side.",
+    "A full-stack PDF platform: natural language commands are parsed by Llama 3.1 into validated operation chains and executed server-side.",
   points: [
-    ["LLM → action", "JSON protocol, Pydantic validation, retries with a feedback loop, chained execution across many files."],
-    ["Fort Knox auth", "JWT refresh rotation + JTI revocation, CSRF double-submit, email OTP, Argon2id, Turnstile, IP rate limiting."],
-    ["Async to the core", "FastAPI, async SQLAlchemy, Alembic on SQL Server — 150+ tests across auth, security, parsing and PDF ops."],
-    ["Shipped", "React frontend with silent token refresh, drag-and-drop upload. Dockerized on Azure App Service + Azure SQL."],
+    ["LLM pipeline", "JSON protocol, Pydantic validation, retries with a feedback loop, chained execution across many files."],
+    ["Auth & security", "JWT refresh rotation + JTI revocation, CSRF double-submit, email OTP, Argon2id, Turnstile, IP rate limiting."],
+    ["Backend", "FastAPI, async SQLAlchemy, Alembic on SQL Server — 150+ tests across auth, security, parsing and PDF ops."],
+    ["Frontend & deploy", "React frontend with silent token refresh, drag-and-drop upload. Dockerized on Azure App Service + Azure SQL."],
   ] as [string, string][],
   stack: ["React", "TypeScript", "FastAPI", "Llama 3.1", "SQL Server", "Docker", "Azure"],
 };
