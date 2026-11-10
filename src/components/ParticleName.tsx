@@ -117,8 +117,6 @@ export default function ParticleName({ text, ready }: Props) {
     const step = () => {
       t += 1;
       const go = readyRef.current;
-      const R = Math.max(70, fontSize * 0.75);
-      const R2 = R * R;
       for (let i = 0; i < n; i++) {
         if (go) {
           // gentle idle drift so the word "breathes"
@@ -126,17 +124,6 @@ export default function ParticleName({ text, ready }: Props) {
           const oy = Math.cos(t * 0.01 + hx[i] * 0.02) * 0.6;
           vx[i] += (hx[i] + ox - x[i]) * 0.045;
           vy[i] += (hy[i] + oy - y[i]) * 0.045;
-        }
-        if (mouse.active) {
-          const dx = x[i] - mouse.x;
-          const dy = y[i] - mouse.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < R2 && d2 > 0.01) {
-            const d = Math.sqrt(d2);
-            const f = (1 - d / R) * 4.2;
-            vx[i] += (dx / d) * f;
-            vy[i] += (dy / d) * f;
-          }
         }
         vx[i] *= 0.84;
         vy[i] *= 0.84;
@@ -147,11 +134,21 @@ export default function ParticleName({ text, ready }: Props) {
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "#ecebe6";
-      for (let i = 0; i < n; i++) if (!tone[i]) ctx.fillRect(x[i], y[i], size, size);
       if (t % 30 === 1 || !accentColor) accentColor = accent();
+      // particles near the pointer light up in the accent colour instead of moving away
+      const R = Math.max(60, fontSize * 0.6);
+      const R2 = R * R;
+      const lit = (i: number) => {
+        if (tone[i]) return true;
+        if (!mouse.active) return false;
+        const dx = x[i] - mouse.x;
+        const dy = y[i] - mouse.y;
+        return dx * dx + dy * dy < R2;
+      };
+      ctx.fillStyle = "#ecebe6";
+      for (let i = 0; i < n; i++) if (!lit(i)) ctx.fillRect(x[i], y[i], size, size);
       ctx.fillStyle = accentColor;
-      for (let i = 0; i < n; i++) if (tone[i]) ctx.fillRect(x[i], y[i], size, size);
+      for (let i = 0; i < n; i++) if (lit(i)) ctx.fillRect(x[i], y[i], size, size);
     };
 
     const loop = () => {

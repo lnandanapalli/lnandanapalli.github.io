@@ -55,11 +55,11 @@ export default function Hero({ ready }: { ready: boolean }) {
         <HoustonClock />
       </div>
 
-      <div className="hero-stage" data-cursor="poke">
+      <div className="hero-stage">
         <ParticleName text="LOKESHWAR" ready={ready} />
         <div className="hero-sub">
           <span className="serif">Reddy Nandanapalli</span>
-          <span className="mono hide-sm">— move your mouse. click. ↑</span>
+          <span className="mono hide-sm">— hover to light it up. click to scatter. ↑</span>
         </div>
       </div>
 
