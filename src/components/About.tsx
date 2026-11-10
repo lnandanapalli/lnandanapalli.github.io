@@ -1,106 +1,92 @@
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import CodeIcon from "@mui/icons-material/Code";
-import CloudIcon from "@mui/icons-material/Cloud";
-import StorageIcon from "@mui/icons-material/Storage";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
-import SectionTitle from "./SectionTitle";
-import { useInView } from "../hooks/useInView";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useScrollProgress } from "../lib/motion";
 
-const HIGHLIGHTS = [
-  { icon: <CodeIcon />, title: "Full-Stack", description: "React, Next.js, Spring Boot, FastAPI" },
-  { icon: <CloudIcon />, title: "Cloud Native", description: "AWS, Azure, Docker, CI/CD" },
-  { icon: <StorageIcon />, title: "Databases", description: "PostgreSQL, MySQL, SQL Server" },
-  { icon: <SmartToyIcon />, title: "AI / ML", description: "TensorFlow, PyTorch, RAG, Fine Tuning" },
+const MANIFESTO: [string, string?][] = [
+  ["I'm"], ["Lokeshwar", "hl"], ["—"], ["an"], ["AI"], ["software"], ["engineer"], ["who"], ["turns"],
+  ["natural", "serif"], ["language", "serif"], ["into"], ["things"], ["that"], ["actually"], ["run.", "hl"],
+  ["RAG"], ["chatbots"], ["that"], ["put"], ["patient", "serif"], ["safety", "serif"], ["first."],
+  ["LLM"], ["pipelines"], ["that"], ["validate"], ["before"], ["they"], ["execute."],
+  ["Platforms"], ["locked"], ["down"], ["with"], ["RBAC,"], ["tested"], ["until"], ["they're"], ["boring.", "hl"],
+  ["From"], ["Bangalore", "serif"], ["to"], ["Houston.", "serif"],
 ];
 
+const STATS = [
+  { n: 3, suffix: "+", label: "years shipping software" },
+  { n: 150, suffix: "+", label: "tests guarding NLPDF" },
+  { n: 99, suffix: "%", label: "CRM reliability at Cognizant" },
+  { n: 2, suffix: "", label: "continents, one keyboard" },
+];
+
+function Counter({ n, suffix }: { n: number; suffix: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const [v, setV] = useState(0);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let id = 0;
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return;
+      io.disconnect();
+      const start = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - start) / 1400);
+        setV(Math.round(n * (1 - Math.pow(1 - p, 4))));
+        if (p < 1) id = requestAnimationFrame(tick);
+      };
+      id = requestAnimationFrame(tick);
+    });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(id);
+    };
+  }, [n]);
+  return (
+    <span ref={ref}>
+      {v}
+      {suffix}
+    </span>
+  );
+}
+
 export default function About() {
-  const { ref, isInView } = useInView();
+  const pin = useRef<HTMLDivElement>(null);
+  const onProgress = useCallback((p: number, el: HTMLElement) => {
+    const words = el.querySelectorAll<HTMLElement>(".mf-word");
+    const lit = p * 1.15 * words.length;
+    words.forEach((w, i) => {
+      const o = Math.max(0, Math.min(1, lit - i));
+      w.style.setProperty("--lit", String(o));
+    });
+  }, []);
+  useScrollProgress(pin, onProgress);
 
   return (
-    <Box id="about" sx={{ py: { xs: 10, md: 14 } }}>
-      <Container maxWidth="lg">
-        <SectionTitle title="About Me" subtitle="A brief introduction to who I am and what I do" />
-
-        <Grid container spacing={4} ref={ref}>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Box
-              sx={{
-                opacity: isInView ? 1 : 0,
-                transform: isInView ? "translateX(0)" : "translateX(-40px)",
-                transition: "all 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
-              }}
-            >
-              <Typography
-                variant="body1"
-                sx={{ color: "text.secondary", mb: 3, fontSize: "1.05rem" }}
-              >
-                Software Engineer with 2+ years of experience designing, developing, and
-                maintaining full-stack web applications. I thrive on building solutions
-                that are both technically sound and deliver excellent user experiences.
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "text.secondary", mb: 3, fontSize: "1.05rem" }}
-              >
-                Experienced in FastAPI, Spring Boot, and React, with expertise in developing
-                RESTful APIs. Proficient in cloud-native ecosystems and CI/CD pipelines,
-                with recent hands-on experience integrating LLMs and AI-driven features.
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{ color: "text.secondary", fontSize: "1.05rem" }}
-              >
-                I hold a Master's degree in Computer Science from the University of Houston,
-                and I'm constantly exploring emerging technologies to stay at the forefront
-                of software development.
-              </Typography>
-            </Box>
-          </Grid>
-
-          <Grid size={{ xs: 12, md: 6 }}>
-            <Grid container spacing={2}>
-              {HIGHLIGHTS.map((item, index) => (
-                <Grid size={{ xs: 6 }} key={item.title}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 3,
-                      height: "100%",
-                      textAlign: "center",
-                      border: 1,
-                      borderColor: "divider",
-                      background: "rgba(15, 15, 26, 0.6)",
-                      backdropFilter: "blur(10px)",
-                      opacity: isInView ? 1 : 0,
-                      transform: isInView ? "translateY(0)" : "translateY(30px)",
-                      transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
-                      "&:hover": {
-                        borderColor: "primary.main",
-                        background: "rgba(99, 102, 241, 0.06)",
-                        transform: "translateY(-4px)",
-                      },
-                    }}
-                  >
-                    <Box sx={{ color: "primary.light", mb: 1.5, "& svg": { fontSize: 32 } }}>
-                      {item.icon}
-                    </Box>
-                    <Typography variant="subtitle2" sx={{ color: "text.primary", mb: 0.5 }}>
-                      {item.title}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: "text.secondary" }}>
-                      {item.description}
-                    </Typography>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+    <section id="about" className="about">
+      <div className="about-pin" ref={pin}>
+      <div className="about-sticky">
+        <div className="section-label mono">
+          <span>(01)</span> About
+        </div>
+        <p className="manifesto">
+          {MANIFESTO.map(([w, kind], i) => (
+            <span key={i} className={`mf-word ${kind ?? ""}`}>
+              {w}{" "}
+            </span>
+          ))}
+        </p>
+      </div>
+      </div>
+      <div className="stats">
+        {STATS.map((s) => (
+          <div key={s.label} className="stat" data-reveal>
+            <div className="stat-n">
+              <Counter n={s.n} suffix={s.suffix} />
+            </div>
+            <div className="stat-l mono">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
