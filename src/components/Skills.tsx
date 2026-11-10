@@ -18,9 +18,7 @@ export default function Skills() {
         <span>(04)</span> Toolbox
       </div>
       <h2 className="display" data-reveal>
-        The <em className="serif">stack</em>,
-        <br />
-        unabridged.
+        The <em className="serif">stack</em>.
       </h2>
       <div className="skill-grid" onPointerMove={onMove}>
         {SKILLS.map((g, i) => (
