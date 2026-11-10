@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type PointerEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type PointerEvent } from "react";
+import CaseModal from "./CaseModal";
 import { NLPDF } from "../data";
 import { prefersReducedMotion } from "../lib/motion";
 
@@ -132,8 +133,23 @@ function Terminal() {
   );
 }
 
+const NLPDF_CASE = {
+  eyebrow: "Personal project · nlpdf.site",
+  title: NLPDF.title,
+  subtitle: NLPDF.subtitle,
+  flows: NLPDF.flows,
+  points: NLPDF.points.map(([k, v]) => `${k}: ${v}`),
+  tags: NLPDF.stack,
+};
+
 export default function Work() {
   const card = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
+  const onCardClick = (e: MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest("a,button")) return;
+    setOpen(true);
+  };
 
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
     const el = card.current;
@@ -164,7 +180,14 @@ export default function Work() {
         </h2>
       </div>
 
-      <div className="work-card" ref={card} onPointerMove={onMove} onPointerLeave={onLeave}>
+      <div
+        className="work-card"
+        ref={card}
+        onPointerMove={onMove}
+        onPointerLeave={onLeave}
+        onClick={onCardClick}
+        data-cursor="expand"
+      >
         <div className="work-glare" />
         <div className="work-grid">
           <div className="work-info">
@@ -191,11 +214,15 @@ export default function Work() {
               <a className="btn" href={NLPDF.github} target="_blank" rel="noreferrer" data-cursor="code" data-magnetic="0.25">
                 Source <span>↗</span>
               </a>
+              <button className="btn" onClick={() => setOpen(true)} data-cursor="expand" data-magnetic="0.25">
+                How it works <span>+</span>
+              </button>
             </div>
           </div>
           <Terminal />
         </div>
       </div>
+      <CaseModal data={open ? NLPDF_CASE : null} onClose={close} />
     </section>
   );
 }

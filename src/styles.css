@@ -721,40 +721,41 @@ html.menu-open .nav .logo {
 .mf-word.hl {
   color: color-mix(in srgb, var(--accent) calc(var(--lit) * 100%), var(--fg));
 }
-/* RAG flow diagram */
-.flow-wrap {
-  padding: 20px 0 140px;
+/* flow diagram (used inside case modals) */
+.flow-wrap + .flow-wrap {
+  margin-top: 34px;
 }
 .flow-cap {
   color: var(--muted);
-  margin-bottom: 26px;
+  margin-bottom: 18px;
 }
 .flow {
   --T: 5s;
   display: flex;
   align-items: stretch;
 }
+.flow.has-branch {
+  padding-bottom: 72px;
+}
 .flow-step {
   display: flex;
   align-items: stretch;
-  flex: 1;
-}
-.flow-step:last-child {
-  flex: none;
+  flex: 1 1 0;
+  min-width: 0;
 }
 .flow-node {
-  flex: none;
+  flex: 1 1 0;
+  min-width: 0;
   position: relative;
-  width: clamp(140px, 14.5vw, 210px);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--bg-2);
-  padding: 16px 16px 18px;
+  border-radius: 14px;
+  background: var(--bg);
+  padding: 14px 12px 16px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   animation: node-pulse var(--T) infinite;
-  animation-delay: calc(var(--i) * var(--T) / 5);
+  animation-delay: calc(var(--i) * var(--T) / var(--n));
 }
 @keyframes node-pulse {
   0%, 2% {
@@ -774,20 +775,19 @@ html.menu-open .nav .logo {
   font-family: var(--display);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
-  font-size: clamp(13px, 1.1vw, 17px);
-  line-height: 1.05;
-  overflow-wrap: anywhere;
+  letter-spacing: -0.03em;
+  font-size: clamp(11px, 0.85vw, 13px);
+  line-height: 1.15;
 }
 .flow-s {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 1.35;
 }
 .flow-link {
-  flex: 1;
+  flex: none;
+  width: clamp(14px, 2vw, 28px);
   align-self: center;
-  min-width: 24px;
   height: 1px;
   background: repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 10px);
   position: relative;
@@ -804,16 +804,17 @@ html.menu-open .nav .logo {
   box-shadow: 0 0 14px 2px var(--accent);
   opacity: 0;
   animation: packet-x var(--T) linear infinite;
-  animation-delay: calc(var(--i) * var(--T) / 5);
+  animation-delay: calc(var(--i) * var(--T) / var(--n) + var(--T) * 0.03);
 }
 @keyframes packet-x {
   0% { left: 0; opacity: 0; }
   2% { opacity: 1; }
-  18% { left: 100%; opacity: 1; }
-  20%, 100% { left: 100%; opacity: 0; }
+  14% { left: 100%; opacity: 1; }
+  16%, 100% { left: 100%; opacity: 0; }
 }
-/* the guard model periodically rejects a malicious packet */
+/* side branch: rejected (red) or retried (amber) packets */
 .flow-block {
+  --c: var(--danger);
   position: absolute;
   left: 50%;
   top: 100%;
@@ -822,11 +823,14 @@ html.menu-open .nav .logo {
   align-items: center;
   transform: translateX(-50%);
 }
+.flow-block.retry {
+  --c: #ffc53d;
+}
 .flow-block::before {
   content: "";
   width: 1px;
-  height: 46px;
-  background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--danger) 45%, transparent) 0 6px, transparent 6px 10px);
+  height: 40px;
+  background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--c) 50%, transparent) 0 6px, transparent 6px 10px);
 }
 .flow-block i {
   position: absolute;
@@ -834,67 +838,168 @@ html.menu-open .nav .logo {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--danger);
-  box-shadow: 0 0 14px 2px var(--danger);
+  background: var(--c);
+  box-shadow: 0 0 14px 2px var(--c);
   opacity: 0;
   animation: packet-drop calc(var(--T) * 2) linear infinite;
-  animation-delay: calc(var(--T) * 0.6);
+  animation-delay: calc(var(--b) * var(--T) / var(--n) + var(--T) * 0.05);
 }
 @keyframes packet-drop {
   0% { transform: translateY(0); opacity: 0; }
   2% { opacity: 1; }
-  9% { transform: translateY(42px); opacity: 1; }
-  11%, 100% { transform: translateY(42px); opacity: 0; }
+  8% { transform: translateY(36px); opacity: 1; }
+  10%, 100% { transform: translateY(36px); opacity: 0; }
 }
 .flow-block b {
   font-weight: 400;
   font-size: 10px;
-  color: var(--danger);
-  border: 1px solid color-mix(in srgb, var(--danger) 45%, transparent);
+  color: var(--c);
+  border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
   border-radius: 99px;
   padding: 4px 9px;
   white-space: nowrap;
   animation: block-flash calc(var(--T) * 2) infinite;
-  animation-delay: calc(var(--T) * 0.6);
+  animation-delay: calc(var(--b) * var(--T) / var(--n) + var(--T) * 0.05);
 }
 @keyframes block-flash {
-  0%, 8% { background: transparent; }
-  10% { background: color-mix(in srgb, var(--danger) 25%, transparent); }
-  22%, 100% { background: transparent; }
+  0%, 7% { background: transparent; }
+  9% { background: color-mix(in srgb, var(--c) 28%, transparent); }
+  20%, 100% { background: transparent; }
 }
-@media (max-width: 860px) {
-  .flow { flex-direction: column; align-items: flex-start; }
-  .flow-step { flex-direction: column; align-items: flex-start; flex: none; }
-  .flow-node { width: min(260px, 70vw); }
+@media (max-width: 900px) {
+  .flow { flex-direction: column; }
+  .flow.has-branch { padding-bottom: 0; }
+  .flow-step { flex-direction: column; flex: none; }
+  .flow-node { flex: none; width: min(230px, 62vw); }
   .flow-link {
-    flex: none;
-    align-self: flex-start;
     width: 1px;
-    height: 44px;
-    min-width: 0;
-    margin-left: 28px;
+    height: 34px;
+    align-self: flex-start;
+    margin-left: 26px;
     background: repeating-linear-gradient(180deg, var(--line) 0 6px, transparent 6px 10px);
   }
   .flow-link i { left: -4px; margin-left: 0; animation-name: packet-y; }
   .flow-block { left: 100%; top: 50%; flex-direction: row; transform: translateY(-50%); }
   .flow-block::before {
-    width: 36px;
+    width: 26px;
     height: 1px;
-    background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--danger) 45%, transparent) 0 6px, transparent 6px 10px);
+    background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--c) 50%, transparent) 0 6px, transparent 6px 10px);
   }
   .flow-block i { top: -4px; left: 0; animation-name: packet-drop-x; }
+  .flow-block b { white-space: normal; max-width: 90px; text-align: center; }
 }
 @keyframes packet-y {
   0% { top: 0; opacity: 0; }
   2% { opacity: 1; }
-  18% { top: 100%; opacity: 1; }
-  20%, 100% { top: 100%; opacity: 0; }
+  14% { top: 100%; opacity: 1; }
+  16%, 100% { top: 100%; opacity: 0; }
 }
 @keyframes packet-drop-x {
   0% { transform: translateX(0); opacity: 0; }
   2% { opacity: 1; }
-  9% { transform: translateX(32px); opacity: 1; }
-  11%, 100% { transform: translateX(32px); opacity: 0; }
+  8% { transform: translateX(22px); opacity: 1; }
+  10%, 100% { transform: translateX(22px); opacity: 0; }
+}
+
+/* case modal */
+html.modal-open {
+  overflow: hidden;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(5, 5, 6, 0.72);
+  backdrop-filter: blur(10px);
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 3vw, 40px);
+  animation: modal-fade 0.4s var(--ease);
+}
+@keyframes modal-fade {
+  from { opacity: 0; }
+}
+.modal-panel {
+  position: relative;
+  width: min(1100px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg-2);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--line));
+  border-radius: 24px;
+  padding: clamp(22px, 4vw, 48px);
+  box-shadow: 0 50px 120px -30px rgba(0, 0, 0, 0.9), 0 0 80px -40px var(--accent);
+  animation: modal-rise 0.6s var(--ease);
+}
+@keyframes modal-rise {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+}
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  font-size: 16px;
+  transition: background 0.3s, color 0.3s, transform 0.4s var(--ease);
+}
+.modal-close:hover {
+  background: var(--accent);
+  color: var(--ink);
+  transform: rotate(90deg);
+}
+.modal-eyebrow {
+  margin-bottom: 14px;
+  padding-right: 56px;
+}
+.modal-title {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  font-size: clamp(32px, 5vw, 64px);
+  line-height: 0.95;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.modal-sub {
+  font-size: clamp(22px, 2.4vw, 32px);
+  color: var(--accent);
+  margin: 6px 0 34px;
+}
+.modal-flows {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 30px 0;
+  margin-bottom: 8px;
+}
+.modal-pts {
+  margin: 26px 0;
+}
+
+/* "view flow" hint on cards */
+.job,
+.work-card {
+  cursor: pointer;
+}
+.job .tags::after {
+  content: "view flow +";
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-left: auto;
+  align-self: center;
+  opacity: 0.6;
+  transition: opacity 0.3s, transform 0.4s var(--ease);
+}
+.job:hover .tags::after,
+.job:focus-visible .tags::after {
+  opacity: 1;
+  transform: translateX(-4px);
 }
 
 /* ───────────────────────── experience ───────────────────────── */

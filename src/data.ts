@@ -16,6 +16,13 @@ export const ROLES = [
   "secure, production-grade APIs",
 ];
 
+export interface FlowDef {
+  title: string;
+  nodes: { t: string; s: string }[];
+  /** a side branch hanging off node `at`, e.g. rejected requests */
+  branch?: { at: number; label: string; kind?: "block" | "retry" };
+}
+
 export interface Job {
   company: string;
   role: string;
@@ -23,6 +30,7 @@ export interface Job {
   period: string;
   points: string[];
   stack: string[];
+  flows: FlowDef[];
 }
 
 export const JOBS: Job[] = [
@@ -38,6 +46,29 @@ export const JOBS: Job[] = [
       "Containerized and shipped the LMS to Azure App Service after regression testing.",
     ],
     stack: ["RAG", "LLMs", "ASP.NET", "Next.js", "Azure", "Docker"],
+    flows: [
+      {
+        title: "RAG chatbot · request flow",
+        nodes: [
+          { t: "Query", s: "patient message" },
+          { t: "Guard model", s: "filters deceptive input" },
+          { t: "Retriever", s: "clinic knowledge base" },
+          { t: "LLM", s: "grounded generation" },
+          { t: "Answer", s: "safe response" },
+        ],
+        branch: { at: 1, label: "✕ blocked" },
+      },
+      {
+        title: "LMS · review to release",
+        nodes: [
+          { t: "Code review", s: "ASP.NET + Next.js" },
+          { t: "Regression", s: "test pass" },
+          { t: "Container", s: "Docker image" },
+          { t: "Azure", s: "App Service" },
+        ],
+        branch: { at: 1, label: "✕ fix & resubmit" },
+      },
+    ],
   },
   {
     company: "ECare",
@@ -52,6 +83,29 @@ export const JOBS: Job[] = [
       "CI/CD with Pytest unit + integration suites; schema design with SQLAlchemy & Alembic.",
     ],
     stack: ["FastAPI", "Next.js", "PostgreSQL", "AWS Bedrock", "Chime SDK", "Pytest"],
+    flows: [
+      {
+        title: "Multi-tenant SaaS · request path",
+        nodes: [
+          { t: "Client", s: "Next.js app" },
+          { t: "JWT + RBAC", s: "tenant & role check" },
+          { t: "FastAPI", s: "business logic" },
+          { t: "PostgreSQL", s: "tenant-scoped data" },
+          { t: "Bedrock", s: "generative AI features" },
+        ],
+        branch: { at: 1, label: "✕ 403 forbidden" },
+      },
+      {
+        title: "CI/CD pipeline",
+        nodes: [
+          { t: "Push", s: "feature branch" },
+          { t: "Pytest", s: "unit + integration" },
+          { t: "Alembic", s: "schema migration" },
+          { t: "Deploy", s: "release" },
+        ],
+        branch: { at: 1, label: "✕ failing tests" },
+      },
+    ],
   },
   {
     company: "University of Houston",
@@ -62,6 +116,18 @@ export const JOBS: Job[] = [
       "Security research on intelligent traffic systems and connected vehicles — preprocessing and analyzing datasets.",
     ],
     stack: ["Python", "Data Analysis", "Security"],
+    flows: [
+      {
+        title: "Connected-vehicle security research",
+        nodes: [
+          { t: "Raw data", s: "traffic & vehicle logs" },
+          { t: "Preprocess", s: "clean, normalize" },
+          { t: "Analysis", s: "attack patterns" },
+          { t: "Findings", s: "security insights" },
+        ],
+        branch: { at: 1, label: "✕ noisy records" },
+      },
+    ],
   },
   {
     company: "Cognizant",
@@ -73,6 +139,19 @@ export const JOBS: Job[] = [
       "Achieved 99% reliability with end-to-end testing on a custom Salesforce CRM application.",
     ],
     stack: ["Java", "Spring Boot", "JSP", "Salesforce"],
+    flows: [
+      {
+        title: "Bug fix lifecycle",
+        nodes: [
+          { t: "Bug report", s: "enterprise app" },
+          { t: "Reproduce", s: "isolate the cause" },
+          { t: "Fix", s: "Spring Boot / JSP" },
+          { t: "E2E tests", s: "Salesforce CRM" },
+          { t: "Release", s: "99% reliability" },
+        ],
+        branch: { at: 3, label: "↺ regression found", kind: "retry" },
+      },
+    ],
   },
   {
     company: "Cognizant",
@@ -81,6 +160,18 @@ export const JOBS: Job[] = [
     period: "Feb 2022 — Jul 2022",
     points: ["Built a CRUD application capstone — RESTful API design and databases."],
     stack: ["REST", "SQL", "Java"],
+    flows: [
+      {
+        title: "CRUD capstone · request flow",
+        nodes: [
+          { t: "Client", s: "HTTP request" },
+          { t: "REST API", s: "routing & validation" },
+          { t: "Service", s: "CRUD logic" },
+          { t: "Database", s: "SQL" },
+        ],
+        branch: { at: 1, label: "✕ 400 bad request" },
+      },
+    ],
   },
 ];
 
@@ -98,6 +189,30 @@ export const NLPDF = {
     ["Frontend & deploy", "React frontend with silent token refresh, drag-and-drop upload. Dockerized on Azure App Service + Azure SQL."],
   ] as [string, string][],
   stack: ["React", "TypeScript", "FastAPI", "Llama 3.1", "SQL Server", "Docker", "Azure"],
+  flows: [
+    {
+      title: "Natural language → PDF operations",
+      nodes: [
+        { t: "Command", s: "“compress & split…”" },
+        { t: "Llama 3.1", s: "JSON op chain" },
+        { t: "Pydantic", s: "schema validation" },
+        { t: "Engine", s: "chained execution" },
+        { t: "PDFs", s: "bulk output" },
+      ],
+      branch: { at: 2, label: "↺ retry with feedback", kind: "retry" },
+    },
+    {
+      title: "Auth flow",
+      nodes: [
+        { t: "Login", s: "email + password" },
+        { t: "Turnstile", s: "CAPTCHA + rate limit" },
+        { t: "Argon2id", s: "password verify" },
+        { t: "Email OTP", s: "verification" },
+        { t: "JWT", s: "refresh rotation + JTI" },
+      ],
+      branch: { at: 1, label: "✕ bot blocked" },
+    },
+  ] as FlowDef[],
 };
 
 export const SKILLS: { group: string; items: string[] }[] = [

@@ -1,5 +1,15 @@
-import { useCallback, useEffect, useRef } from "react";
-import { JOBS } from "../data";
+import { useCallback, useEffect, useRef, useState } from "react";
+import CaseModal, { type CaseData } from "./CaseModal";
+import { JOBS, type Job } from "../data";
+
+const toCase = (j: Job): CaseData => ({
+  eyebrow: `${j.period} · ${j.place}`,
+  title: j.company,
+  subtitle: j.role,
+  flows: j.flows,
+  points: j.points,
+  tags: j.stack,
+});
 import { useScrollProgress } from "../lib/motion";
 
 /**
@@ -18,6 +28,8 @@ export default function Experience() {
   const pin = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const line = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState<CaseData | null>(null);
+  const close = useCallback(() => setActive(null), []);
 
   useEffect(() => {
     const p = pin.current;
@@ -76,7 +88,21 @@ export default function Experience() {
               <p className="mono muted">2022 — present</p>
             </div>
             {JOBS.map((j, i) => (
-              <article key={j.role + j.period} className="job" data-cursor="read">
+              <article
+                key={j.role + j.period}
+                className="job"
+                data-cursor="expand"
+                role="button"
+                tabIndex={0}
+                aria-label={`${j.company}, ${j.role}: open details`}
+                onClick={() => setActive(toCase(j))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActive(toCase(j));
+                  }
+                }}
+              >
                 <div className="job-top mono">
                   <span>{String(i + 1).padStart(2, "0")}</span>
                   <span>{j.period}</span>
@@ -108,6 +134,7 @@ export default function Experience() {
           </div>
         </div>
       </div>
+      <CaseModal data={active} onClose={close} />
     </section>
   );
 }
