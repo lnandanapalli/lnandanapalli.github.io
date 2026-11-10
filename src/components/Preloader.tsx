@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getLenis, prefersReducedMotion } from "../lib/motion";
 
-const LOG = [
-  "loading embeddings",
-  "warming up the RAG index",
-  "validating pydantic schemas",
-  "rotating refresh tokens",
-  "compiling personality",
-  "ready",
-];
+const LOG = ["loading fonts", "loading assets", "building scene", "ready"];
 
 export default function Preloader({ onDone }: { onDone: () => void }) {
   const [count, setCount] = useState(0);

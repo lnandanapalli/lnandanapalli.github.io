@@ -71,11 +71,9 @@ export default function Experience() {
                 <span>(02)</span> Experience
               </div>
               <h2 className="display">
-                Where I've
-                <br />
-                <em className="serif">shipped</em> things.
+                Experience<span className="accent">.</span>
               </h2>
-              <p className="mono muted">2022 → now · keep scrolling →</p>
+              <p className="mono muted">2022 — present</p>
             </div>
             {JOBS.map((j, i) => (
               <article key={j.role + j.period} className="job" data-cursor="read">
@@ -104,10 +102,6 @@ export default function Experience() {
                 </div>
               </article>
             ))}
-            <div className="exp-end" aria-hidden>
-              <span className="serif">and counting</span>
-              <span className="display">→</span>
-            </div>
           </div>
           <div className="exp-line">
             <div ref={line} />

@@ -1,51 +1,51 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { useScrollProgress } from "../lib/motion";
 
 const MANIFESTO: [string, string?][] = [
-  ["I'm"], ["Lokeshwar", "hl"], ["—"], ["an"], ["AI"], ["software"], ["engineer"], ["who"], ["turns"],
-  ["natural", "serif"], ["language", "serif"], ["into"], ["things"], ["that"], ["actually"], ["run.", "hl"],
-  ["RAG"], ["chatbots"], ["that"], ["put"], ["patient", "serif"], ["safety", "serif"], ["first."],
-  ["LLM"], ["pipelines"], ["that"], ["validate"], ["before"], ["they"], ["execute."],
-  ["Platforms"], ["locked"], ["down"], ["with"], ["RBAC,"], ["tested"], ["until"], ["they're"], ["boring.", "hl"],
-  ["From"], ["Bangalore", "serif"], ["to"], ["Houston.", "serif"],
+  ["I'm"], ["Lokeshwar,", "hl"], ["an"], ["AI"], ["software"], ["engineer"], ["in"], ["Houston."],
+  ["I"], ["build"], ["RAG", "serif"], ["chatbots,", "serif"], ["agentic", "serif"], ["workflows", "serif"],
+  ["and"], ["secure,"], ["multi-tenant"], ["platforms"], ["with"], ["Python,", "hl"], ["FastAPI,", "hl"],
+  ["React", "hl"], ["and"], ["the"], ["cloud."],
 ];
 
-const STATS = [
-  { n: 3, suffix: "+", label: "years shipping software" },
-  { n: 150, suffix: "+", label: "tests guarding NLPDF" },
-  { n: 99, suffix: "%", label: "CRM reliability at Cognizant" },
-  { n: 2, suffix: "", label: "continents, one keyboard" },
+const FLOW = [
+  { t: "Query", s: "patient message" },
+  { t: "Guard model", s: "filters deceptive input" },
+  { t: "Retriever", s: "clinic knowledge base" },
+  { t: "LLM", s: "grounded generation" },
+  { t: "Answer", s: "safe response" },
 ];
 
-function Counter({ n, suffix }: { n: number; suffix: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const [v, setV] = useState(0);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let id = 0;
-    const io = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
-      io.disconnect();
-      const start = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - start) / 1400);
-        setV(Math.round(n * (1 - Math.pow(1 - p, 4))));
-        if (p < 1) id = requestAnimationFrame(tick);
-      };
-      id = requestAnimationFrame(tick);
-    });
-    io.observe(el);
-    return () => {
-      io.disconnect();
-      cancelAnimationFrame(id);
-    };
-  }, [n]);
+/** Animated diagram of the RAG chatbot request flow: packets travel node to node. */
+function Flow() {
   return (
-    <span ref={ref}>
-      {v}
-      {suffix}
-    </span>
+    <div className="flow-wrap" data-reveal>
+      <div className="flow-cap mono">
+        <span className="accent">●</span> RAG chatbot · request flow
+      </div>
+      <div className="flow">
+        {FLOW.map((n, i) => (
+          <div key={n.t} className="flow-step" style={{ ["--i" as string]: i }}>
+            <div className={`flow-node ${i === 1 ? "guard" : ""}`}>
+              <span className="mono flow-idx">{String(i + 1).padStart(2, "0")}</span>
+              <span className="flow-t">{n.t}</span>
+              <span className="flow-s">{n.s}</span>
+              {i === 1 && (
+                <span className="flow-block" aria-hidden>
+                  <i />
+                  <b className="mono">✕ blocked</b>
+                </span>
+              )}
+            </div>
+            {i < FLOW.length - 1 && (
+              <div className="flow-link" aria-hidden>
+                <i />
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -55,8 +55,7 @@ export default function About() {
     const words = el.querySelectorAll<HTMLElement>(".mf-word");
     const lit = p * 1.15 * words.length;
     words.forEach((w, i) => {
-      const o = Math.max(0, Math.min(1, lit - i));
-      w.style.setProperty("--lit", String(o));
+      w.style.setProperty("--lit", String(Math.max(0, Math.min(1, lit - i))));
     });
   }, []);
   useScrollProgress(pin, onProgress);
@@ -64,29 +63,20 @@ export default function About() {
   return (
     <section id="about" className="about">
       <div className="about-pin" ref={pin}>
-      <div className="about-sticky">
-        <div className="section-label mono">
-          <span>(01)</span> About
-        </div>
-        <p className="manifesto">
-          {MANIFESTO.map(([w, kind], i) => (
-            <span key={i} className={`mf-word ${kind ?? ""}`}>
-              {w}{" "}
-            </span>
-          ))}
-        </p>
-      </div>
-      </div>
-      <div className="stats">
-        {STATS.map((s) => (
-          <div key={s.label} className="stat" data-reveal>
-            <div className="stat-n">
-              <Counter n={s.n} suffix={s.suffix} />
-            </div>
-            <div className="stat-l mono">{s.label}</div>
+        <div className="about-sticky">
+          <div className="section-label mono">
+            <span>(01)</span> About
           </div>
-        ))}
+          <p className="manifesto">
+            {MANIFESTO.map(([w, kind], i) => (
+              <span key={i} className={`mf-word ${kind ?? ""}`}>
+                {w}{" "}
+              </span>
+            ))}
+          </p>
+        </div>
       </div>
+      <Flow />
     </section>
   );
 }
